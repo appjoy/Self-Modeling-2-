@@ -1,0 +1,95 @@
+\section{Experimental Setup}
+\label{sec:etup}
+
+
+%% 1. Explain the apps used
+%% 2. Explain the device used
+
+% We carried our SPMD on three phones with fairly diverse hardware.
+% Moto Z3 is a representative of recent phone.
+% It has a Kryo Qualcomm SOC~\cite{snapdragon835} based on the big.LITTLE architecture
+% with 4 LITTLE cores (22 frequencies) and 4 big cores (31 frequencies), and
+% an Adreno 540 GPU which can run at 7 different frequencies.
+ 
+% In contrast, the Nexus 6 was a representative of the generation before
+% the big.LITTLE architecture, with a Krait Qualcomm SOC~\cite{snapdragon805} that
+% has 4 cores which can independently operate at 18 different frequencies, and
+% an Adreno 420 GPU  which can run at 5 different frequencies.
+
+% In our experiments, we simplified the SPMD modeling task by turning off the LITTLE cores on Moto Z3
+% % for all our experiments, hence all our results are based on big cores.
+% which reduces the number of parameters in the modeling equations.
+% As we will see below, even with this simplification, making SPMD to work is already difficult. 
+
+% Since we focus our SPMD experiments on two phone components, the CPU and GPU,
+% we used a set of {three} popular game apps which are known to predominantly
+% use only the CPU and GPU. The apps have diverse GPU and CPU utilization. 
+% For example, the average GPU utilization is 38.0\% for Pottery,
+% 25.92\% for Candy Crush Saga and 16.0\% for Bricks Breaker on Moto Z3.
+
+We carried our SPMD on three phones.
+Pixel 2 and Moto Z3 has a Kryo Qualcomm SOC Snapdragon 835~\cite{snapdragon835} and Pixel 4 has Snapdragon 855~\cite{snapdragon855} which are based on the big.LITTLE architecture.
+Pixel 2 and Moto Z3 has 22 LITTLE core and 31 big core frequencies, whereas Pixel 4
+has 19 LITTLE core and 17 big core frequencies.
+The SOC for Pixel 2 and Moto Z3 has an Adreno 540 GPU which can run at 7 different frequencies 
+and 
+Pixel 4 has Adreno 640 GPU which can run at 5 different frequencies.
+
+For our experiments, we simplified the SPMD modeling task by turning off the LITTLE cores on Moto Z3
+% for all our experiments, hence all our results are based on big cores.
+which reduces the number of parameters in the modeling equations.
+As we will see below, even with this simplification, making SPMD to work is difficult. 
+Since we focus our SPMD experiments on two of the phone components, the CPU and GPU,
+we used a set of {three} popular game apps which are known to be predominantly
+using only the CPU and GPU. We found that the apps have diverse GPU and CPU utilization. 
+For example, the average GPU utilization is 38.0\% for Mini Golf 3D,
+25.92\% for Candy Crush Saga and 16.0\% for Bricks Breaker on Moto Z3.
+(Utilisation not final yet.)
+We further consider two scenarios from each of these apps,
+as listed in Table~\ref{tab:app_scenario_description}.
+
+\begin{table}[tp]
+    \centering
+    \caption{App scenario description.}
+    \vspace{-0.1in}
+    {\small
+    \begin{tabular}{|p{15mm}|p{12mm}|p{46mm}|}
+    \hline
+    \multicolumn{1}{|c|}{App} & \multicolumn{1}{c|}{Scenario} & \multicolumn{1}{c|}{Description} \\
+    \hline
+         \multirow{2}{15mm}{Bricks Breaker} & Menu & Menu page\\
+         \cline{2-3}
+         & Still & Game running without any input \\
+         \hline
+         \multirow{2}{15mm}{Candy Crush Saga} & Menu & Menu Page\\
+         \cline{2-3}
+         & Still &  Game running without any input \\
+         \hline
+         \multirow{2}{15mm}{Mini Golf 3D} & Menu & Menu Page \\
+         \cline{2-3}
+         & Still &  Game running without any input \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:app_scenario_description}
+    \vspace{-0.1in}
+\end{table}
+
+We generated a 250-second run for each of the app scenario with the phone attached to the power monitor.
+For
+the three phones Pixel 2, Moto Z3 and Pixel 4, we kept the screen dark and removed its constant power draw of 43mA, 57mA and 78mA respectively
+from the power monitor measurement to set up the equations. 
+For each scenario we left the app running without any user inputs.
+
+% \paragraph{Aligning power trigger trace with power monitor readings}
+% When readings from the Monsoon external power monitor, either as ground truth in model accuracy calculation or as the left-hand-side (LHS) value of the modeling equations, 
+
+Since the Monsoon power monitor has a separate clock and thus clock drifts from that of the phone, we need to align the time of power monitor  power readings with the timing of the data we collected on the phone.
+To do this, we used a microbenchmark by generating a 5-second CPU burst known as a beacon,
+and align the time of the CPU utilization surge in the event trace with the time of the corresponding square wave in the power monitor readings.
+
+% The results we observed from our experiment can be easily extended by including corresponding triggers for the case while all the cores are running .
+
+Finally, we found that the findings for the three phones are  very similar.
+% We thus moved all the results for Nexus 6 
+% to~\cite{longversion} due to page limit.

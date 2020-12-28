@@ -1,0 +1,65 @@
+\subsection{Our Contribution}
+\label{subsec:contri}
+
+
+In this work, we study the feasibility of SPMD to derive 
+accurate {\it component-wise power models} for modern smartphones 
+which is  critical to many energy diagnostics solutions such as energy profiling~\cite{flinn:1999,shye2009into,zhang2010accurate,sesame:2011,pathak2012energy,appscope,ding2017gfxdoctor,facebookbatterymetrics}.
+
+In order to show the in-depth analysis within  the  page limitations, 
+we focus our feasibility study limited to two of the power-hungry 
+phone components, the CPU and GPU, on representative phones from two generations, Moto Z3 and Nexus 6. 
+
+Our key findings are summarized as follows:
+\begin{itemize}
+\item To understand the granularity of app run for SPMD application, 
+we start with a measurement study of the power model dependence on
+app usage. Our results show that both the CPU and the GPU of the 
+two phones exhibit significant power state variations, \ie their 
+power draw for the same power state (for same CPU frequency and same 
+GPU frequency and state) can vary up to  13.5\% and 29.7\% for CPU and GPU, respectively, 
+even when running different scenarios of the same apps. 
+This result suggests that (1) any power model derived via 
+TPMD offline which is based on a given microbenchmark and
+can be inaccurate when it is used to model the power draw of 
+different apps or different app scenarios;
+(2) different scenarios of the same app should not be used together in SPMD. 
+    
+\cut{
+\item The built-in power sensor readings available in 
+modern smartphones can have as much as 17.99\% average 
+error compared to an external high-resolution power monitor 
+and hence are not accurate enough to be used in SPMD. Thus we focus 
+our study using the power monitor. 
+}
+%
+\item 
+However, when limiting SPMD within each of the app scenarios, creating 
+one equation at a second time scale 
+cannot create system of equations with enough diversity for 
+the regression solver to output any meaningful power model parameters.
+%
+\cut{Despite adding many constraints to the regression solver,
+the GPU Idle power is as high as the GPU Busy power. }
+The key reason is that the CPU/GPU usage for the app scenarios such 
+as games are highly repetitive; 
+the systems of equations often have a single large singular value.  
+\item 
+We further explore if we zoom to smaller time scale, by setting each 
+equation at the millisecond time scale
+to explicitly exploit the known diversity of GPU usage, can improve 
+the diversity of the system of equations. Our results show that doing 
+so can 
+make the regression solver to sometimes output meaningful model parameters, 
+but the measurement noise at such fine time scale often overwhelm 
+the equation diversity.
+Further SPMD would not scale as a 1-minute app run would require solving thousands of systems of equations. 
+\if 0
+Our experiments show that the system still does not have enough diversity  
+    at either the micro-scale, \ie with 2 equations in each rendering interval to exploit the GPU state diversity (Busy/Idle), or the nano-scale, \ie with 16 equations in each 16.7ms rendering interval, for two reasons: (1) the component usage lacks diversity,
+    and (2) the noise in the coefficient measurements overshadows the diversity of utilization coefficients in the equations. 
+\fi
+\end{itemize}
+    
+These findings from our exploration strongly suggest that while SPMD may be useful for energy modeling which only requires a good least-square fitting of the two sides of the energy equations~\cite{sesame:2011}, it remains extremely challenging to derive component-wise power model parameters . 
+

@@ -1,0 +1,56 @@
+%\section{Power Model Dependency on App Usage - A TPMD Study}
+\section{At What Granularity of App Run to Apply SPMD?}
+\label{sec:primer}
+
+Since SPMD is meant to capture the power model's dependence on app usage, it should be applied to 
+each app run interval that exhibits the {\em same} component usage.
+To gain insight into the extent of such "same" component usage intervals of apps,
+we start with a study to find out  how much the GPU power models derived using TPMD vary with
+apps and app scenarios. 
+% show the component power draw dependency on app usage 
+% using a representative modern phone, Moto Z3,
+% by performing TPMD to generate the CPU and GPU power models
+% on a representative modern phone, Moto Z3.
+% In particular, we discuss the four-step process of TPMD discussed in \S\ref{sec:back} for the CPU and the GPU.
+For the experiments in this section,
+we use the external Monsoon power monitor ~\cite{monsoonpowermonitor} to measure the phone power draw.
+We keep the screen brightness level at 0 which consumes 51.38 mA and this is subtracted
+from the total phone power draw measurement.
+
+\begin{table}[t]
+{\footnotesize
+    \centering
+    \caption{CPU and GPU power model parameters on the 3 phone. (PF: per frequency.)}
+    \vspace{-0.1in}
+    \begin{tabular}{|c|c|c|c|c|}
+         \hline
+         Model Parameters & Parameter  & \multicolumn{3}{c|}{Number of Parameters}\\
+         \cline{3-5}
+          & Symbol & Pixel 2 & Moto Z3 & Pixel 4\\
+         \hline
+        CPU base power                          & $p^c_{base}$          &  1      &   1       & 1\\
+        CPU core $i$ power at freq. $f_k$       & $p^c_i(f_k)$          & 31, PF  &  31, PF   & 17, PF\\
+        % TODO: add per frequency per core in the description\\
+        GPU busy power at freq. $g_k$           & $p^g_{busy}(g_k)$     &  7, PF  &   7, PF   & 5, PF\\
+        GPU idle power at freq. $g_k$           & $p^g_{idle}(g_k)$     &  7, PF  &   7, PF   & 5, PF\\
+         \hline
+    \end{tabular}
+    \label{tab:parameters}
+    \vspace{-0.1in}
+}
+\end{table}
+
+% \questionaj{We need a paragraph here (perhaps reference table 3?) detailing which 
+% trigger are we logging, where are we logging them from, and is experiment done 
+% using power monitor or power sensor
+
+\if 0
+Power models for mobile devices have been actively studied in recent years, and the proposed power models fall into two major categories.
+
+The first category of power models known as utilization-based models for smartphones (e.g., [21, 24, 25]) are based on the intuitive assumption that the utilization of a hardware component (e.g., NIC) corresponds to a certain power state and the change of utilization is what triggers the power state change of that component. Consequently, these models all use the utilization of a hardware component as the “trigger” in modeling power states and state tran- sitions. Such models thus do not capture power behavior of modern wireless components that do not lead to active utilization such as the promotion and tail power behavior of 3G and LTE [19, 12], and thus can incur high modeling error.
+The second category of power models capture the non-utilization- based power behavior of wireless components using finite state ma- chines (FSMs), e.g., [8, 15, 18, 16, 17, 9] for WiFi and 3G and [12] for LTE. In a nut shell, the built-in state machine of the wire- less radio, e.g., the RRC states and transitions in LTE, is reverse- engineered and represented in a finite state machine that annotates each power state or transition with measured power draw and dura-
+\fi
+
+
+
+\input{primer/1_power_model}

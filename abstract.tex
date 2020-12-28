@@ -1,0 +1,49 @@
+\begin{abstract}
+
+Power modeling of mobile device components is foundational to mobile app energy drain analysis such as energy profiling and energy debugging of mobile apps. Traditional power model derivation (TPMD) is an offline process based on microbenchmarks 
+% to drive each mobile device component into each possible power state to record its power draw (from a power monitor) 
+which cannot capture the power model's dependence on app usage, the mobile device and environment such as the battery age.
+% or device temperature. 
+Self-constructive power model derivation (SPMD) promises to overcome these shortcomings of TPMD by collecting 
+% each actual power state that each device component ran under, the utilization, and 
+component power state and utilization , total device energy drain during an app run and derives the power model parameters by regression using a system of linear equations. 
+Though first proposed almost a decade ago, SPMD has only been explored so far for energy drain estimation with a finer resolution (e.g. 10ms) compared to the device power sensor readings (e.g. 1s). 
+
+
+In this paper, we perform a verification study regarding 
+the feasibility of SPMD in deriving component-wise power models 
+for modern smartphones. Our study shows that SPMD faces a 
+fundamental dilemma: it can only be used for the particular 
+app scenario as even different scenarios of the same app result 
+in different power models; on the other hand, when 
+restricted to a particular app scenario, the system of 
+equations lacks diversity when created at the second granularity, 
+preventing the regression solver to generate meaningful model parameters.  
+%  Finally, we show
+% zooming into the millisecond scale in setting up equations can overcome the diversity problem 
+% but the equation can be dominated by measurement noise, and further SPMD would not scale
+% as a 1-minute app run would require solving thousands of systems of equations. 
+Our study suggests that it is extremely challenging to derive component-wise power model parameters for modern smartphones using SPMD. 
+
+\if 0
+In this paper, we perform an in-depth investigation of the feasibility of SPMD in deriving accurate per-component power models for modern smartphones. 
+ % We systematically explore the time-scale for setting up the system of equations, ranging from macro-scale (one equation per second), to micro-scale (two equations per rendering interval to exploit GPU Busy and Idle power states), to nano-scale (16 equations per rendering interval to explore diversity within each rendering interval.)
+We find that while conceptually simple, in practice it is 
+extreme difficult to create a system of equations that 
+exhibit sufficient diversity which poses two challenges 
+to the regression solver to generate meaningful per-component 
+power model parameters: (1) lack of diversity in phone
+component usage which leads to the rank of the equations 
+(right-hand-side of equations) to be smaller than the number 
+of unknowns (model parameters); (2) noise in energy drain 
+readings (left-hand-side of the equations) which results 
+in contradicting component usage and energy drain. Our 
+experimental results suggest that while SPMD may be useful for
+energy modeling which only requires a good fitting of the two 
+sides of the equations, it remain not practical for deriving 
+per-component power model parameters for use in mobile app 
+energy drain analysis such as energy profiling and energy debugging. 
+
+%   We believe that our  ndings can encourage further research and standardization e orts towards higher utilization of commercialized CIoT network infrastructures.
+\fi
+\end{abstract}
